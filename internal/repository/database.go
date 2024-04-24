@@ -9,6 +9,12 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+const (
+	getByHashQuery        = "SELECT hash, original_url, expiration_date FROM urlshortener WHERE hash = ?"
+	getByOriginalUrlQuery = "SELECT hash, original_url, expiration_date FROM urlshortener WHERE original_url = ?"
+	createUrlQuery        = "INSERT INTO urlshortener (hash, original_url, expiration_date) VALUES (?, ?, ?)"
+)
+
 type DatabaseShortenerRepository struct {
 	db *sql.DB
 }
@@ -35,8 +41,7 @@ func NewDatabaseShortenerRepository(username, password, host, port, database str
 }
 
 func (repo *DatabaseShortenerRepository) GetByHash(hash string) (*entity.ShortenedUrlEntity, error) {
-	query := "SELECT hash, original_url, expiration_date FROM urlshortener WHERE hash = ?"
-	row := repo.db.QueryRow(query, hash)
+	row := repo.db.QueryRow(getByHashQuery, hash)
 
 	var url entity.ShortenedUrlEntity
 
@@ -52,8 +57,7 @@ func (repo *DatabaseShortenerRepository) GetByHash(hash string) (*entity.Shorten
 }
 
 func (repo *DatabaseShortenerRepository) GetByOriginalUrl(originalUrl string) (*entity.ShortenedUrlEntity, error) {
-	query := "SELECT hash, original_url, expiration_date FROM urlshortener WHERE original_url = ?"
-	row := repo.db.QueryRow(query, originalUrl)
+	row := repo.db.QueryRow(getByOriginalUrlQuery, originalUrl)
 
 	var url entity.ShortenedUrlEntity
 
@@ -69,9 +73,7 @@ func (repo *DatabaseShortenerRepository) GetByOriginalUrl(originalUrl string) (*
 }
 
 func (repo *DatabaseShortenerRepository) Save(url *entity.ShortenedUrlEntity) error {
-	query := "INSERT INTO urlshortener (hash, original_url, expiration_date) VALUES (?, ?, ?)"
-
-	_, err := repo.db.Exec(query, url.Hash, url.OriginalUrl, url.ExpirationDate)
+	_, err := repo.db.Exec(createUrlQuery, url.Hash, url.OriginalUrl, url.ExpirationDate)
 	if err != nil {
 		return err
 	}

@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS urlshortener;
 
 CREATE TABLE urlshortener
 (
-    hash            varchar(6) collate utf8mb3_bin not null primary key,
+    hash            varchar(8) collate utf8mb3_bin not null primary key,
     original_url    varchar(10240)                 not null,
     expiration_date timestamp                      not null
 );
