@@ -40,7 +40,7 @@ func (service *ShortenerService) ShortenUrl(url string) (*entity.ShortenedUrlEnt
 }
 
 func (service *ShortenerService) ExpandUrl(url string) (*entity.ShortenedUrlEntity, error) {
-	existingUrl, err := service.repository.GetByOriginalUrl(url)
+	existingUrl, err := service.repository.GetByHash(url)
 	if err != nil {
 		return nil, err
 	}

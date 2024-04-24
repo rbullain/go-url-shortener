@@ -20,7 +20,7 @@ type DatabaseShortenerRepository struct {
 }
 
 func connect(username, password, host, port, database string) (*sql.DB, error) {
-	dataSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, host, port, database)
+	dataSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", username, password, host, port, database)
 
 	db, err := sql.Open("mysql", dataSource)
 	if err != nil {
