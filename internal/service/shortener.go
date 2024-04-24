@@ -7,17 +7,22 @@ import (
 	"time"
 )
 
-type ShortenerService struct {
+type ShortenerService interface {
+	ShortenUrl(url string) (*entity.ShortenedUrlEntity, error)
+	ExpandUrl(url string) (*entity.ShortenedUrlEntity, error)
+}
+
+type shortenerService struct {
 	repository repository.ShortenerRepository
 }
 
-func NewShortenerService(repository repository.ShortenerRepository) *ShortenerService {
-	return &ShortenerService{
+func NewShortenerService(repository repository.ShortenerRepository) ShortenerService {
+	return &shortenerService{
 		repository: repository,
 	}
 }
 
-func (service *ShortenerService) ShortenUrl(url string) (*entity.ShortenedUrlEntity, error) {
+func (service *shortenerService) ShortenUrl(url string) (*entity.ShortenedUrlEntity, error) {
 	existingUrl, err := service.repository.GetByOriginalUrl(url)
 	if err != nil {
 		return nil, err
@@ -39,7 +44,7 @@ func (service *ShortenerService) ShortenUrl(url string) (*entity.ShortenedUrlEnt
 	return newUrl, nil
 }
 
-func (service *ShortenerService) ExpandUrl(url string) (*entity.ShortenedUrlEntity, error) {
+func (service *shortenerService) ExpandUrl(url string) (*entity.ShortenedUrlEntity, error) {
 	existingUrl, err := service.repository.GetByHash(url)
 	if err != nil {
 		return nil, err
