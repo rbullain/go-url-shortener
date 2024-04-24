@@ -21,8 +21,5 @@ func main() {
 	router.POST("/", shortenerApplication.ShortenUrl)
 	router.GET("/:url", shortenerApplication.ExpandUrl)
 
-	err := router.Run("localhost:8080")
-	if err != nil {
-		return
-	}
+	_ = router.Run("localhost:8080")
 }
