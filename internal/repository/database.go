@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"go-url-shortener/internal/entity"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -10,6 +11,27 @@ import (
 
 type DatabaseShortenerRepository struct {
 	db *sql.DB
+}
+
+func connect(username, password, host, port, database string) (*sql.DB, error) {
+	dataSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, host, port, database)
+
+	db, err := sql.Open("mysql", dataSource)
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
+}
+
+func NewDatabaseShortenerRepository(username, password, host, port, database string) *DatabaseShortenerRepository {
+	db, err := connect(username, password, host, port, database)
+	if err != nil {
+		panic(err)
+	}
+
+	return &DatabaseShortenerRepository{
+		db: db,
+	}
 }
 
 func (repo *DatabaseShortenerRepository) GetByHash(hash string) (*entity.ShortenedUrlEntity, error) {
