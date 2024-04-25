@@ -4,13 +4,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"go-url-shortener/internal/api"
 	"go-url-shortener/internal/api/controller"
-	"go-url-shortener/internal/repository"
-	"go-url-shortener/internal/service"
+	"go-url-shortener/internal/application"
+	"go-url-shortener/internal/infra/repository"
 )
 
 var (
 	shortenerRepository  = repository.NewDatabaseShortenerRepository("admin", "admin", "localhost", "3306", "golang_learning")
-	shortenerService     = service.NewShortenerService(shortenerRepository)
+	shortenerService     = application.NewSum256HashShortener(shortenerRepository)
 	shortenerController  = controller.NewShortenerController(shortenerService)
 	shortenerApplication = api.NewShortenerApplication(shortenerController)
 )

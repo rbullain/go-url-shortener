@@ -4,9 +4,8 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"go-url-shortener/internal/entity"
-
 	_ "github.com/go-sql-driver/mysql"
+	"go-url-shortener/internal/domain/shortener/entity"
 )
 
 const (

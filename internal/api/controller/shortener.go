@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"go-url-shortener/internal/api/dto"
-	"go-url-shortener/internal/service"
+	"go-url-shortener/internal/domain/shortener/service"
 	"net/http"
 )
 
